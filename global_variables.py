@@ -317,6 +317,12 @@ SAVE_PATH = f'data/dataset/W_{TS_LENGTH}_A_{NUMBER_OF_AUGMENTATION}_X_{SELECTED_
 if not os.path.exists(SAVE_PATH):
     os.makedirs(SAVE_PATH)
 
+SAVE_OUT= f'output/dataset/W_{TS_LENGTH}_A_{NUMBER_OF_AUGMENTATION}_X_{SELECTED_AXIS}'
+if not os.path.exists(SAVE_OUT):
+    os.makedirs(SAVE_OUT)
+
+
+
 STANDARDIZE = True
 
 number_of_cells = 54

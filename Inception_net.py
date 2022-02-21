@@ -1,10 +1,8 @@
 # example of creating a CNN with an efficient inception module
-from keras.models import Model
-from keras.layers import Input
-from keras.layers import Conv2D
-from keras.layers import MaxPooling2D
-from keras.layers.merge import concatenate
-from keras.utils import plot_model
+from tensorflow.keras.models import Model
+from tensorflow.keras.layers import Input, Conv2D, MaxPooling2D
+from tensorflow.keras.layers.merge import concatenate
+from tensorflow.keras.utils import plot_model
 
 # function for creating a projected inception module
 def inception_module(layer_in, f1, f2_in, f2_out, f3_in, f3_out, f4_out):

@@ -2,7 +2,7 @@ from global_variables import *
 
 import numpy as np
 import matplotlib.pyplot as plt
-from keras import backend as K
+from tensorflow.keras import backend as K
 
 
 def percentage_difference(y_hat, y):
@@ -42,8 +42,9 @@ def ks_boxplots(data, name, dir_labels, outliers):
         x = np.random.normal(i, 0.02, len(y))
         plt.plot(x+1, y, 'r.', alpha=0.2)
 
-    plt.savefig(f'{SAVE_PATH}/{name}.png')
-    plt.show()
+    plt.savefig(f'{SAVE_OUT}/{name}.png', bbox_inches='tight')
+    # plt.show()
+    plt.close()
 
     fig = plt.figure(figsize =(10, 7))
     ax = fig.add_axes([0, 0, 1, 1])
@@ -55,8 +56,9 @@ def ks_boxplots(data, name, dir_labels, outliers):
     ax.set_xticklabels(labels=sorted(dir_labels.keys()))
     ax.grid()
 
-    plt.savefig(f'{SAVE_PATH}/{name}_NO.png')
-    plt.show()
+    plt.savefig(f'{SAVE_OUT}/{name}_NO.png', bbox_inches='tight')
+    # plt.show()
+    plt.close()
 
 
 #########################################################
@@ -77,8 +79,9 @@ def plot_learning_acc_loss(history, name=""):
     plt.ylabel('mean_absolute_percentage_error')
     plt.xlabel('epoch')
     plt.legend(['train', 'validation'], loc='upper left')
-    plt.savefig(f'{SAVE_PATH}/{name}_model_r2_keras.png')
-    plt.show()
+    plt.savefig(f'{SAVE_OUT}/{name}_model_r2_keras.png', bbox_inches='tight')
+    # plt.show()
+    plt.close()
 
     # summarize history for loss
     plt.plot(history.history['loss'])
@@ -87,5 +90,6 @@ def plot_learning_acc_loss(history, name=""):
     plt.ylabel('loss')
     plt.xlabel('epoch')
     plt.legend(['train', 'validation'], loc='upper left')
-    plt.savefig(f'{SAVE_PATH}/{name}_model_loss.png')
-    plt.show()
+    plt.savefig(f'{SAVE_OUT}/{name}_model_loss.png', bbox_inches='tight')
+    # plt.show()
+    plt.close()

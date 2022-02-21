@@ -1,8 +1,8 @@
 from plotting_utils import r2_keras
 
 import tensorflow as tf
-from keras.models import Sequential
-from keras.layers import Dense, LSTM, Dropout, Flatten
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Dense, LSTM, Dropout, Flatten
 
 
 def LSTM_model(learning_rate=1e-4, input_shape=None, loss_f=None):
@@ -11,7 +11,7 @@ def LSTM_model(learning_rate=1e-4, input_shape=None, loss_f=None):
             units=256,
             return_sequences=True,
             input_shape=input_shape,
-            kernel_initializer=tf.keras.initializers.GlorotNormal(seed=None),
+            # kernel_initializer=tf.keras.initializers.GlorotNormal(seed=None),
             bias_initializer='zeros'
         ),
         Dropout(0.1),

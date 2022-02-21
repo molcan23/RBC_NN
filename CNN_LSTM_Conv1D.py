@@ -2,8 +2,8 @@ from global_variables import *
 from plotting_utils import r2_keras
 
 import tensorflow as tf
-from keras.models import Sequential
-from keras.layers import Dense, LSTM, Dropout, Flatten, TimeDistributed, Activation,\
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Dense, LSTM, Dropout, Flatten, TimeDistributed, Activation,\
     Conv1D, MaxPooling1D, BatchNormalization
 
 
