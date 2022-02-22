@@ -1,18 +1,21 @@
-from global_variables import *
+import global_variables as cs
 import numpy as np
 import sklearn.model_selection
 
 
-def dataset_load(dataset_path=f'data/dataset/W_{TS_LENGTH}_A_{NUMBER_OF_AUGMENTATION}_X_{SELECTED_AXIS}'):
-    training_data1 = np.empty([1, TS_LENGTH, len(SELECTED_COLUMNS)], dtype=float)
+def dataset_load(dataset_path=''):
+    dataset_path=f'data/dataset/W_{cs.TS_LENGTH}_A_{cs.NUMBER_OF_AUGMENTATION}_X_{cs.SELECTED_AXIS}'
+    training_data1 = np.empty([1, cs.TS_LENGTH, len(cs.SELECTED_COLUMNS)], dtype=float)
     target_data1 = []
 
-    for i in range(number_of_cells):  # 52  # 48
+    print(f'{cs.TS_LENGTH} {cs.NUMBER_OF_AUGMENTATION}')
+
+    for i in range(cs.number_of_cells):  # 52  # 48
         print(i, "/", 54)
-        data_out = f'{dataset_path}/data_time_series_W_{TS_LENGTH}_A_{NUMBER_OF_AUGMENTATION}' \
-                   f'_X_{SELECTED_AXIS}_rbc_{str(i)}.npy'
-        label_out = f'{dataset_path}/data_labels_W_{TS_LENGTH}_A_{NUMBER_OF_AUGMENTATION}' \
-                    f'_X_{SELECTED_AXIS}_rbc_{str(i)}.npy'
+        data_out = f'{dataset_path}/data_time_series_W_{cs.TS_LENGTH}_A_{cs.NUMBER_OF_AUGMENTATION}' \
+                   f'_X_{cs.SELECTED_AXIS}_rbc_{str(i)}.npy'
+        label_out = f'{dataset_path}/data_labels_W_{cs.TS_LENGTH}_A_{cs.NUMBER_OF_AUGMENTATION}' \
+                    f'_X_{cs.SELECTED_AXIS}_rbc_{str(i)}.npy'
 
         trd = np.load(data_out)
         tad = np.load(label_out)

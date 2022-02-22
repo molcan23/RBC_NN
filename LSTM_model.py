@@ -8,23 +8,23 @@ from tensorflow.keras.layers import Dense, LSTM, Dropout, Flatten
 def LSTM_model(learning_rate=1e-4, input_shape=None, loss_f=None):
     model = Sequential([
         LSTM(
-            units=256,
+            units=cs.N_NODES,
             return_sequences=True,
             input_shape=input_shape,
             # kernel_initializer=tf.keras.initializers.GlorotNormal(seed=None),
             bias_initializer='zeros'
         ),
-        Dropout(0.1),
+        Dropout(cs.DROPOUT_RATE),
         LSTM(units=64, return_sequences=True),
-        Dropout(0.1),
+        Dropout(cs.DROPOUT_RATE),
         LSTM(units=32, return_sequences=True),
-        Dropout(0.1),
+        Dropout(cs.DROPOUT_RATE),
         LSTM(units=10, return_sequences=True),
         Flatten(),
-        Dropout(0.1),
-        Dense(512),
-        Dropout(0.1),
-        Dense(256),
+        Dropout(cs.DROPOUT_RATE),
+        Dense(cs.N_NODES * 2),
+        Dropout(cs.DROPOUT_RATE),
+        Dense(cs.N_NODES),
         Dense(1)
     ])
 

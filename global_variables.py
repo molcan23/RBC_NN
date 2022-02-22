@@ -305,13 +305,13 @@ SELECTED_COLUMNS_TO_NORMALIZE = xy_reduced_normalize
 
 # parameters
 
-TS_LENGTH = 10
+TS_LENGTH = 0
 NUM_OF_RBC_TYPES = 3
 LOSS_FN = 'mape'
 
 START = 500
 SAME_SIZE_OF_DF_FROM_SIMULATION = 2700
-NUMBER_OF_AUGMENTATION = 30
+NUMBER_OF_AUGMENTATION = 0
 
 SAVE_PATH = f'data/dataset/W_{TS_LENGTH}_A_{NUMBER_OF_AUGMENTATION}_X_{SELECTED_AXIS}'
 if not os.path.exists(SAVE_PATH):
@@ -322,14 +322,13 @@ if not os.path.exists(SAVE_OUT):
     os.makedirs(SAVE_OUT)
 
 
-
 STANDARDIZE = True
 
 number_of_cells = 54
 
 name_of_simulation = 'three_types'
 
-EPOCHS = 1000
+EPOCHS = 3 
 DROPOUT_RATE = .1
 N_NODES = 512
 LSTM_NODES = 256

@@ -1,9 +1,9 @@
 import global_variables as cs
-
 import os
 import re
 import numpy as np
 import pandas as pd
+import tensorflow as tf
 
 
 def standardize_columns(df, cols):
@@ -13,10 +13,17 @@ def standardize_columns(df, cols):
     return df
 
 
+# def augmentation(x, gaussian_noise_level=.001, offset_noise_level=.5):
+#     noise        = gaussian_noise_level * tf.random.normal(x.shape)
+#     offset_noise = 2.  * tf.random.uniform(x.shape) - 1.0
+#     x_result     = tf.convert_to_tensor(x) + noise + offset_noise_level * offset_noise
+#     return np.array(x_result)
+
+
 def augmentation(x, gaussian_noise_level=.001, offset_noise_level=.5):
-    noise = gaussian_noise_level * np.random.normal(size=x.shape)
+    noise        = gaussian_noise_level * np.random.normal(size=x.shape)
     offset_noise = 2. * np.random.uniform(size=x.shape) - 1.0
-    x_result = np.array(x) + noise + offset_noise_level * offset_noise
+    x_result     = x + noise + offset_noise_level * offset_noise
     return x_result
 
 
@@ -47,6 +54,7 @@ def create_training_examples(df, target, ts_length=10, selected_columns=None, nu
 
 
 def dataset_creation():
+    print(cs.TS_LENGTH)
     df_all = pd.DataFrame()
     rbc_coefficients = []
     number_of_cells = 0
@@ -105,4 +113,4 @@ def dataset_creation():
         # training_data1 = training_data1 + trd
         # target_data1 = target_data1 + tad
 
-dataset_creation()
+# dataset_creation()
