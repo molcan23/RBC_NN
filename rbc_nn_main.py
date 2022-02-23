@@ -19,7 +19,7 @@ if __name__ == '__main__':
         cs.TS_LENGTH = ts_window
         cs.NUMBER_OF_AUGMENTATION = round((8000 / (2200 / ts_window)) - 1)
 
-        for selected_axis in ['xy', 'xz']:  # , 'xyz']:
+        for selected_axis in ['xy', 'xz', 'xyz']:
             if selected_axis == 'xy':
                 cs.SELECTED_AXIS = 'xy'
                 cs.SELECTED_COLUMNS = cs.xy_reduced
@@ -98,10 +98,10 @@ if __name__ == '__main__':
                 np.save(f'{cs.SAVE_OUT}/y_train.txt', np.array(_y_train))
                 np.save(f'{cs.SAVE_OUT}/y_train_predicted.txt', np.array(predictions_train))
 
-                data, dir_labels, dir_predictions = data_for_plot(predictions_train, _y_test)
-                ks_boxplots(data,
-                            f"{label}_LF_{cs.LOSS_FN}_W_{cs.TS_LENGTH}_A_{cs.NUMBER_OF_AUGMENTATION}_SC_{cs.SELECTED_AXIS}_error",
-                            dir_labels,
-                            dir_predictions,
-                            outliers=False)
+                # data, dir_labels, dir_predictions = data_for_plot(predictions_train, _y_test)
+                # ks_boxplots(data,
+                #             f"{label}_LF_{cs.LOSS_FN}_W_{cs.TS_LENGTH}_A_{cs.NUMBER_OF_AUGMENTATION}_SC_{cs.SELECTED_AXIS}_error",
+                #             dir_labels,
+                #             dir_predictions,
+                #             outliers=False)
 

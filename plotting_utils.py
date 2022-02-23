@@ -31,7 +31,7 @@ def data_for_plot(pred, real):
 def ks_boxplots(data, name, dir_labels, dir_prediction, outliers):
     fig = plt.figure(figsize=(10, 7))
     ax = fig.add_axes([0, 0, 1, 1])
-    bp = ax.boxplot(data, showfliers=outliers, showmeans=True)
+    ax.boxplot(data, showfliers=outliers, showmeans=True)
 
     plt.title('Absolute Percentage Error by True Value of ks')
     ax.set_xlabel('Value of ks')
@@ -50,7 +50,7 @@ def ks_boxplots(data, name, dir_labels, dir_prediction, outliers):
 
     fig = plt.figure(figsize=(10, 7))
     ax = fig.add_axes([0, 0, 1, 1])
-    bp = ax.boxplot(data, showfliers=outliers, showmeans=True)
+    ax.boxplot(data, showfliers=outliers, showmeans=True)
 
     plt.title('Absolute Percentage Error by True Value of ks')
     ax.set_xlabel('Value of ks')
@@ -59,16 +59,16 @@ def ks_boxplots(data, name, dir_labels, dir_prediction, outliers):
     ax.grid()
 
     plt.savefig(f'{cs.SAVE_OUT}/{name}_NO.png', bbox_inches='tight')
+
     # plt.show()
     plt.close()
 
     for idx, label in enumerate(dir_labels.keys()):
         fig = plt.figure(figsize=(10, 7))
         ax = fig.add_axes([0, 0, 1, 1])
-        # bp = ax.boxplot(data, showfliers=outliers, showmeans=True)
 
         x = dir_prediction[label]
-        y = np.random.normal(i, 0.02, len(x))
+        y = np.random.normal(idx, 0.02, len(x))
         plt.plot(x, y, 'r.', alpha=0.2)
 
         plt.title(f'Absolute Percentage Error of ks={label}')
@@ -79,41 +79,6 @@ def ks_boxplots(data, name, dir_labels, dir_prediction, outliers):
         plt.savefig(f'{cs.SAVE_OUT}/{str(label)}.png', bbox_inches='tight')
         # plt.show()
         plt.close()
-
-
-# def ks_boxplots(data, name, dir_labels, outliers):
-#     fig = plt.figure(figsize=(10, 7))
-#     ax = fig.add_axes([0, 0, 1, 1])
-#     bp = ax.boxplot(data, showfliers=outliers, showmeans=True)
-#
-#     plt.title('Absolute Percentage Error by True Value of ks')
-#     ax.set_xlabel('Value of ks')
-#     ax.set_ylabel('Absolute Percentage Error')
-#     ax.set_xticklabels(labels=sorted(dir_labels.keys()))
-#     ax.grid()
-#
-#     for i in range(len(data)):
-#         y = data[i]
-#         x = np.random.normal(i, 0.02, len(y))
-#         plt.plot(x + 1, y, 'r.', alpha=0.2)
-#
-#     plt.savefig(f'{cs.SAVE_OUT}/{name}.png', bbox_inches='tight')
-#     # plt.show()
-#     plt.close()
-#
-#     fig = plt.figure(figsize=(10, 7))
-#     ax = fig.add_axes([0, 0, 1, 1])
-#     bp = ax.boxplot(data, showfliers=outliers, showmeans=True)
-#
-#     plt.title('Absolute Percentage Error by True Value of ks')
-#     ax.set_xlabel('Value of ks')
-#     ax.set_ylabel('Absolute Percentage Error')
-#     ax.set_xticklabels(labels=sorted(dir_labels.keys()))
-#     ax.grid()
-#
-#     plt.savefig(f'{cs.SAVE_OUT}/{name}_NO.png', bbox_inches='tight')
-#     # plt.show()
-#     plt.close()
 
 
 #########################################################
