@@ -17,7 +17,7 @@ def data_for_plot(pred, real):
     dir_prediction = {}
     diff_fun = percentage_difference
 
-    for i, j in zip(predictions_future, y_test):
+    for i, j in zip(pred, real):
         if str(j) in dir_labels.keys():
             dir_prediction[str(j)].append(i[0])
             dir_labels[str(j)].append(diff_fun(i[0], j))

@@ -49,9 +49,11 @@ if __name__ == '__main__':
 
             X_train, X_test, y_train, y_test, X_train_CNN, X_test_CNN, y_train_CNN, y_test_CNN = dataset_load()
 
-            for model, label, data in zip([CNN_LSTM_Conv2D_model],
-                                    ['CNN-LSTM_Conv2D'],
-                                    [[X_train_CNN, X_test_CNN, y_train_CNN, y_test_CNN]]):
+            for model, label, data in zip([LSTM_model, CNN_LSTM_Conv1D_model, CNN_LSTM_Conv2D_model],
+                                    ['LSTM', 'CNN-LSTM_Conv1D', 'CNN-LSTM_Conv2D'],
+                                    [[X_train, X_test, y_train, y_test],
+                                     [X_train, X_test, y_train, y_test],
+                                     [X_train_CNN, X_test_CNN, y_train_CNN, y_test_CNN]]):
 
                 _X_train, _X_test, _y_train, _y_test = data
                 loss_f = tf.keras.losses.MeanAbsolutePercentageError()
@@ -86,11 +88,11 @@ if __name__ == '__main__':
                    
                 np.save(f'{cs.SAVE_OUT}/y_test.txt', np.array(_y_test))
                 np.save(f'{cs.SAVE_OUT}/y_test_predicted.txt', np.array(predictions_test))
-                data, dir_labels = data_for_plot(predictions_test, _y_test)
-                ks_boxplots(data,
-                            f"{label}_LF_{cs.LOSS_FN}_W_{cs.TS_LENGTH}_A_{cs.NUMBER_OF_AUGMENTATION}_SC_{cs.SELECTED_AXIS}_error",
-                            dir_labels,
-                            outliers=False)
+                # data, dir_labels = data_for_plot(predictions_test, _y_test)
+                # ks_boxplots(data,
+                #             f"{label}_LF_{cs.LOSS_FN}_W_{cs.TS_LENGTH}_A_{cs.NUMBER_OF_AUGMENTATION}_SC_{cs.SELECTED_AXIS}_error",
+                #             dir_labels,
+                #             outliers=False)
 
                 # training "predictions"
                 predictions_train = model_1.predict(_X_train)
