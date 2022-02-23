@@ -60,11 +60,10 @@ def dispersion_for_vtk_dataset(number_of_cells=18, path='.', sim_name=''):
         if _cycle % 100000 == 0:
             print(_cycle)
 
-        if write_cycle:
-            if max_cycle > _cycle:
-                write_cycle = False
-            else:
-                cycles.append(_cycle)
+        if _cycle == 0:
+            cycles = []
+
+        cycles.append(_cycle)
 
         rbc = int(i.split('_')[0].split('.')[0].split('c')[1])
 
@@ -74,6 +73,8 @@ def dispersion_for_vtk_dataset(number_of_cells=18, path='.', sim_name=''):
         os.makedirs(sim_name)
 
     for i in range(number_of_cells):
+        print(len(sorted(list(cycles))))
+        print(len(vtk_cell_info[i]))
         df = pd.DataFrame(data={'cycle': sorted(list(cycles)),
                                 'info': [x for _, x in sorted(zip(cycles, vtk_cell_info[i]))]})
         df.to_csv(f'{sim_name}/rbc{i}.csv', index=False)
