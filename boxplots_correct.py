@@ -44,7 +44,7 @@ def ks_boxplots(data, name, dir_labels, dir_prediction, outliers):
         x = np.random.normal(i, 0.02, len(y))
         plt.plot(x + 1, y, 'r.', alpha=0.2)
 
-    plt.savefig(f'a.png', bbox_inches='tight')
+    plt.savefig(f'{name}/a.png', bbox_inches='tight')
     # plt.show()
     plt.close()
 
@@ -58,7 +58,7 @@ def ks_boxplots(data, name, dir_labels, dir_prediction, outliers):
     ax.set_xticklabels(labels=sorted(dir_labels.keys()))
     ax.grid()
 
-    plt.savefig(f'a_NO.png', bbox_inches='tight')
+    plt.savefig(f'{name}/a_NO.png', bbox_inches='tight')
     # plt.savefig(f'{cs.SAVE_OUT}/{name}_NO.png', bbox_inches='tight')
     # plt.show()
     plt.close()
@@ -76,7 +76,7 @@ def ks_boxplots(data, name, dir_labels, dir_prediction, outliers):
         ax.set_ylabel('Absolute Percentage Error')
         ax.grid()
 
-        plt.savefig(f'{str(label)}.png', bbox_inches='tight')
+        plt.savefig(f'{name}/{str(label)}.png', bbox_inches='tight')
         # plt.show()
         plt.close()
 
