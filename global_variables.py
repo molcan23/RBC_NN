@@ -328,9 +328,7 @@ number_of_cells = 54
 
 name_of_simulation = 'three_types'
 
-EPOCHS = 3
+EPOCHS = 1000
 DROPOUT_RATE = .1
 N_NODES = 512
 LSTM_NODES = 256
-
-k_s = ['0.005', '0.009', '0.015', '0.03', '0.05', '0.1', '0.15', '0.225', '0.3']
