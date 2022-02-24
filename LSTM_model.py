@@ -1,4 +1,5 @@
 from plotting_utils import r2_keras
+import global_variables as cs
 
 import tensorflow as tf
 from tensorflow.keras.models import Sequential
