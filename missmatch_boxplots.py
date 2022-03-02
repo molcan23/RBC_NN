@@ -18,11 +18,11 @@ if not os.path.exists(save):
 
 for f in only_cell_files:
     try:
-        y_train = np.load(f'{path}/{f}/y_train_{f.split("_")[1]}.npy')
-        y_hat_train = np.load(f'{path}/{f}/y_train_predicted_{f.split("_")[1]}.npy')
+        y_train = np.load(f'{path}/{f}/y_train.txt.npy')
+        y_hat_train = np.load(f'{path}/{f}/y_train_predicted.txt.npy')
 
-        y_test = np.load(f'{path}/{f}/y_test_{f.split("_")[1]}.npy')
-        y_hat_test = np.load(f'{path}/{f}/y_test_predicted_{f.split("_")[1]}.npy')
+        y_test = np.load(f'{path}/{f}/y_test.txt.npy')
+        y_hat_test = np.load(f'{path}/{f}/y_test_predicted.txt.npy')
 
         data, dir_labels, dir_prediction = data_for_plot(y_hat_test, y_test)
 

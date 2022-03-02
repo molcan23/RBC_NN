@@ -4,6 +4,10 @@ import os
 import sklearn.preprocessing
 from sklearn.preprocessing import OneHotEncoder
 from sklearn.metrics import multilabel_confusion_matrix, ConfusionMatrixDisplay, confusion_matrix
+import global_variables as cs
+
+if not os.path.exists(cs.COMPARISON_PLOTS):
+    os.makedirs(cs.COMPARISON_PLOTS)
 
 path = 'output/dataset'
 only_cell_files = sorted([f for f in os.listdir(path)])
@@ -16,6 +20,7 @@ borders = [float('-inf'), 0.007, 0.012, 0.0225, 0.04, 0.075, 0.125, 0.1875, 0.26
 def plot_confusion_matrix(cm,
                           target_names,
                           title='Confusion matrix',
+                          name='',
                           cmap=None,
                           normalize=True):
     """
@@ -51,7 +56,7 @@ def plot_confusion_matrix(cm,
     import itertools
 
     accuracy = np.trace(cm) / float(np.sum(cm))
-    print(accuracy)
+    print(name, '\t', accuracy)
     misclass = 1 - accuracy
 
     if cmap is None:
@@ -84,7 +89,7 @@ def plot_confusion_matrix(cm,
     plt.tight_layout()
     plt.ylabel('True label')
     plt.xlabel('Predicted label\naccuracy={:0.4f}; misclass={:0.4f}'.format(accuracy, misclass))
-    plt.savefig('confusion_matrix.png')  # show()
+    plt.savefig(f'{cs.COMPARISON_PLOTS}/{name}_confusion_matrix.png')  # show()
 
 
 def percentage_difference(y_hat, y):
@@ -115,21 +120,24 @@ def data_for_plot(pred, real, folder):
     plot_confusion_matrix(cm,
                           k_s,
                           title=f'Confusion matrix {folder}',
+                          name=folder,
                           cmap=None,
                           normalize=True)
 
 
-for f in only_cell_files[1:]:
-    # try:
-        y_train = np.load(f'{path}/{f}/y_train_{f.split("_")[1]}.npy')
-        y_hat_train = np.load(f'{path}/{f}/y_train_predicted_{f.split("_")[1]}.npy')
+if __name__ == '__main__':
 
-        y_test = np.load(f'{path}/{f}/y_test_{f.split("_")[1]}.npy')
-        y_hat_test = np.load(f'{path}/{f}/y_test_predicted_{f.split("_")[1]}.npy')
+    print(only_cell_files)
+    for f in only_cell_files[1:]:
+        try:
+            y_train = np.load(f'{path}/{f}/y_train.txt.npy')
+            y_hat_train = np.load(f'{path}/{f}/y_train_predicted.txt.npy')
 
-        data_for_plot(y_hat_test, y_test, f)
+            y_test = np.load(f'{path}/{f}/y_test.txt.npy')
+            y_hat_test = np.load(f'{path}/{f}/y_test_predicted.txt.npy')
 
-        break
-    # except Exception as e:
-    #     print(e)
+            data_for_plot(y_hat_test, y_test, f)
+
+        except Exception as e:
+            print(e)
 
