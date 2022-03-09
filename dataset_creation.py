@@ -4,6 +4,8 @@ import re
 import numpy as np
 import pandas as pd
 import tensorflow as tf
+import warnings
+warnings.filterwarnings("ignore")
 
 
 def standardize_columns(df, cols):
@@ -13,14 +15,7 @@ def standardize_columns(df, cols):
     return df
 
 
-# def augmentation(x, gaussian_noise_level=.001, offset_noise_level=.5):
-#     noise        = gaussian_noise_level * tf.random.normal(x.shape)
-#     offset_noise = 2.  * tf.random.uniform(x.shape) - 1.0
-#     x_result     = tf.convert_to_tensor(x) + noise + offset_noise_level * offset_noise
-#     return np.array(x_result)
-
-
-def augmentation(x, gaussian_noise_level=.001, offset_noise_level=.5):
+def augmentation(x, gaussian_noise_level=.001, offset_noise_level=1):
     noise        = gaussian_noise_level * np.random.normal(size=x.shape)
     offset_noise = 2. * np.random.uniform(size=x.shape) - 1.0
     x_result     = x + noise + offset_noise_level * offset_noise
@@ -46,11 +41,17 @@ def create_training_examples(df, target, ts_length=10, selected_columns=None, nu
         training_data.append(sample)
         target_data.append(target)
 
-        for _ in range(number_of_augmentation):
-            training_data.append(augmentation(sample))
-            target_data.append(target)
+        # for _ in range(number_of_augmentation):
+        #     training_data.append(augmentation(sample))
+        #     target_data.append(target)
 
     return training_data, target_data
+
+
+def unison_shuffled_copies(a, b):
+    assert len(a) == len(b)
+    p = np.random.permutation(len(a))
+    return a[p], b[p]
 
 
 def dataset_creation():
@@ -88,7 +89,6 @@ def dataset_creation():
 
     if cs.STANDARDIZE:
         df_all = standardize_columns(df_all, cols=cs.SELECTED_COLUMNS_TO_STANDARDIZE)
-        df_all
 
     dataset_path = f'data/dataset/W_{cs.TS_LENGTH}_A_{cs.NUMBER_OF_AUGMENTATION}_X_{cs.SELECTED_AXIS}'
     if not os.path.exists(dataset_path):
@@ -107,10 +107,11 @@ def dataset_creation():
         label_out = f'{dataset_path}/data_labels_W_{cs.TS_LENGTH}_A_{cs.NUMBER_OF_AUGMENTATION}' \
                     f'_X_{cs.SELECTED_AXIS}_rbc_{str(i)}.npy'
 
-        np.save(data_out, np.array(trd))
-        np.save(label_out, np.array(tad))
+        trd, tad = unison_shuffled_copies(np.array(trd), np.array(tad))
+        np.save(data_out, trd)
+        np.save(label_out, tad)
 
-        # training_data1 = training_data1 + trd
-        # target_data1 = target_data1 + tad
 
-# dataset_creation()
+if __name__ == '__main__':
+    cs.TS_LENGTH = 10
+    dataset_creation()

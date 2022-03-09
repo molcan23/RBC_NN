@@ -9,6 +9,8 @@ from CNN_LSTM_Conv2D import CNN_LSTM_Conv2D_model
 import tensorflow as tf
 from tensorflow.keras.callbacks import EarlyStopping, ReduceLROnPlateau, ModelCheckpoint
 import numpy as np
+import warnings
+warnings.filterwarnings("ignore")
 
 STANDARDIZE = True
 
@@ -17,7 +19,7 @@ if __name__ == '__main__':
 
     for ts_window in [5, 10, 20, 30, 40, 50]:
         cs.TS_LENGTH = ts_window
-        cs.NUMBER_OF_AUGMENTATION = round((8000 / (2200 / ts_window)) - 1)
+        cs.NUMBER_OF_AUGMENTATION = round((8000 / ((cs.SAME_SIZE_OF_DF_FROM_SIMULATION - cs.START) / ts_window)) - 1)
 
         for selected_axis in ['xy', 'xz', 'xyz']:
             if selected_axis == 'xy':
@@ -47,15 +49,16 @@ if __name__ == '__main__':
             if not os.path.exists(cs.SAVE_OUT):
                 os.makedirs(cs.SAVE_OUT)
 
-            X_train, X_test, y_train, y_test, X_train_CNN, X_test_CNN, y_train_CNN, y_test_CNN = dataset_load()
+            X_train, X_val, X_test, y_train, y_val, y_test, X_train_CNN, X_val_CNN, X_test_CNN = \
+                dataset_load(number_of_augmentations=cs.NUMBER_OF_AUGMENTATION)
 
             for model, label, data in zip([LSTM_model, CNN_LSTM_Conv1D_model, CNN_LSTM_Conv2D_model],
                                     ['LSTM', 'CNN-LSTM_Conv1D', 'CNN-LSTM_Conv2D'],
-                                    [[X_train, X_test, y_train, y_test],
-                                     [X_train, X_test, y_train, y_test],
-                                     [X_train_CNN, X_test_CNN, y_train_CNN, y_test_CNN]]):
+                                    [[X_train, X_val, y_train, y_val],
+                                     [X_train, X_val, y_train, y_val],
+                                     [X_train_CNN, X_val_CNN, y_train, y_val]]):
 
-                _X_train, _X_test, _y_train, _y_test = data
+                _X_train, _X_val, _y_train, _y_val = data
                 loss_f = tf.keras.losses.MeanAbsolutePercentageError()
 
                 model_1 = model(learning_rate=1e-4, input_shape=_X_train[0].shape, loss_f=loss_f)
@@ -72,7 +75,7 @@ if __name__ == '__main__':
                                                    f"_A_{cs.NUMBER_OF_AUGMENTATION}_SC_{cs.SELECTED_AXIS}")
 
                 print('\n\n')
-                score = model_1.evaluate(_X_test, _y_test, verbose=1)
+                score = model_1.evaluate(_X_val, _y_val, verbose=1)
                 print(f'{score}')
 
                 out_file = open(f'{cs.SAVE_OUT}/statistics.txt', "a")
@@ -84,26 +87,13 @@ if __name__ == '__main__':
                 out_file.close()
 
                 # predictions
-                predictions_test = model_1.predict(_X_test)
+                predictions_test = model_1.predict(_X_val)
                    
-                np.save(f'{cs.SAVE_OUT}/y_test.txt', np.array(_y_test))
-                np.save(f'{cs.SAVE_OUT}/y_test_predicted.txt', np.array(predictions_test))
-                # data, dir_labels = data_for_plot(predictions_test, _y_test)
-                # ks_boxplots(data,
-                #             f"{label}_LF_{cs.LOSS_FN}_W_{cs.TS_LENGTH}_A_{cs.NUMBER_OF_AUGMENTATION}_SC_{cs.SELECTED_AXIS}_error",
-                #             dir_labels,
-                #             outliers=False)
+                np.save(f'{cs.SAVE_OUT}/y_val.txt', np.array(_y_val))
+                np.save(f'{cs.SAVE_OUT}/y_val_predicted.txt', np.array(predictions_test))
 
                 # training "predictions"
                 predictions_train = model_1.predict(_X_train)
                     
                 np.save(f'{cs.SAVE_OUT}/y_train.txt', np.array(_y_train))
                 np.save(f'{cs.SAVE_OUT}/y_train_predicted.txt', np.array(predictions_train))
-
-                # data, dir_labels, dir_predictions = data_for_plot(predictions_train, _y_test)
-                # ks_boxplots(data,
-                #             f"{label}_LF_{cs.LOSS_FN}_W_{cs.TS_LENGTH}_A_{cs.NUMBER_OF_AUGMENTATION}_SC_{cs.SELECTED_AXIS}_error",
-                #             dir_labels,
-                #             dir_predictions,
-                #             outliers=False)
-

@@ -1,10 +1,18 @@
 import global_variables as cs
 import numpy as np
 import sklearn.model_selection
+import os
 
 
-def dataset_load(dataset_path=''):
-    dataset_path=f'data/dataset/W_{cs.TS_LENGTH}_A_{cs.NUMBER_OF_AUGMENTATION}_X_{cs.SELECTED_AXIS}'
+def augmentation(x, gaussian_noise_level=.001, offset_noise_level=1):
+    noise = gaussian_noise_level * np.random.normal(size=x.shape)
+    offset_noise = 2. * np.random.uniform(size=x.shape) - 1.0
+    x_result = x + noise + offset_noise_level * offset_noise
+    return x_result
+
+
+def dataset_load(dataset_path='', number_of_augmentations=10):
+    dataset_path = f'data/dataset/W_{cs.TS_LENGTH}_A_{cs.NUMBER_OF_AUGMENTATION}_X_{cs.SELECTED_AXIS}'
     training_data1 = np.empty([1, cs.TS_LENGTH, len(cs.SELECTED_COLUMNS)], dtype=float)
     target_data1 = []
 
@@ -28,21 +36,39 @@ def dataset_load(dataset_path=''):
 
     target_data = np.array(target_data1)
 
-    training_data_CNN = np.reshape(training_data,
-                                   [training_data.shape[0],
-                                    training_data.shape[1],
-                                    training_data.shape[2],
-                                    1])
+    X_train, X_test, y_train, y_test = sklearn.model_selection.train_test_split(training_data, target_data,
+                                                                                test_size=0.1, random_state=1)
+    trd = []
+    tad = []
+    for sample, target in zip (X_train, y_train):
+        trd.append(sample)
+        tad.append(target)
+        for _ in range(number_of_augmentations):
+            trd.append(augmentation(sample))
+            tad.append(target)
+
+    X_train, X_val, y_train, y_val = sklearn.model_selection.train_test_split(np.array(trd), np.array(tad),
+                                                                              test_size=0.2, random_state=1)
+
+    X_train_CNN = np.reshape(X_train, [X_train.shape[0], X_train.shape[1], X_train.shape[2], 1])
+    X_val_CNN = np.reshape(X_val, [X_val.shape[0], X_val.shape[1], X_val.shape[2], 1])
+    X_test_CNN = np.reshape(X_test, [X_test.shape[0], X_test.shape[1], X_test.shape[2], 1])
 
     print('X_train shape == {}.'.format(training_data.shape))
 
-    print('X_train shape == {}.'.format(training_data_CNN.shape))
+    print('X_train shape == {}.'.format(X_train.shape))
+    print('X_val shape == {}.'.format(X_val.shape))
+    print('X_test shape == {}.'.format(X_test.shape))
     print('y_train shape == {}.'.format(target_data.shape))
 
-    X_train, X_test, y_train, y_test = \
-        sklearn.model_selection.train_test_split(training_data, target_data, test_size=0.1, shuffle=True)
+    if not os.path.exists(f'data/{cs.TS_LENGTH}'):
+        os.makedirs(f'data/{cs.TS_LENGTH}')
 
-    X_train_CNN, X_test_CNN, y_train_CNN, y_test_CNN = \
-        sklearn.model_selection.train_test_split(training_data_CNN, target_data, test_size=0.1, shuffle=True)
+    np.save(f'data/{cs.TS_LENGTH}/X_train', np.array(X_train))
+    np.save(f'data/{cs.TS_LENGTH}/y_train', np.array(y_train))
+    np.save(f'data/{cs.TS_LENGTH}/X_val', np.array(X_val))
+    np.save(f'data/{cs.TS_LENGTH}/y_val', np.array(y_val))
+    np.save(f'data/{cs.TS_LENGTH}/X_test', np.array(X_test))
+    np.save(f'data/{cs.TS_LENGTH}/y_test', np.array(y_test))
 
-    return X_train, X_test, y_train, y_test, X_train_CNN, X_test_CNN, y_train_CNN, y_test_CNN
+    return X_train, X_val, X_test, y_train, y_val, y_test, X_train_CNN, X_val_CNN, X_test_CNN
