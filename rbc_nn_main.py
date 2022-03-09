@@ -21,7 +21,7 @@ if __name__ == '__main__':
         cs.TS_LENGTH = ts_window
         cs.NUMBER_OF_AUGMENTATION = round((8000 / ((cs.SAME_SIZE_OF_DF_FROM_SIMULATION - cs.START) / ts_window)) - 1)
 
-        for selected_axis in ['xy', 'xz', 'xyz']:
+        for selected_axis in ['xy']:  # , 'xz', 'xyz']:
             if selected_axis == 'xy':
                 cs.SELECTED_AXIS = 'xy'
                 cs.SELECTED_COLUMNS = cs.xy_reduced
@@ -89,11 +89,11 @@ if __name__ == '__main__':
                 # predictions
                 predictions_test = model_1.predict(_X_val)
                    
-                np.save(f'{cs.SAVE_OUT}/y_val.txt', np.array(_y_val))
-                np.save(f'{cs.SAVE_OUT}/y_val_predicted.txt', np.array(predictions_test))
+                np.save(f'{cs.SAVE_OUT}/y_val', np.array(_y_val))
+                np.save(f'{cs.SAVE_OUT}/y_val_predicted', np.array(predictions_test))
 
                 # training "predictions"
                 predictions_train = model_1.predict(_X_train)
                     
-                np.save(f'{cs.SAVE_OUT}/y_train.txt', np.array(_y_train))
-                np.save(f'{cs.SAVE_OUT}/y_train_predicted.txt', np.array(predictions_train))
+                np.save(f'{cs.SAVE_OUT}/y_train', np.array(_y_train))
+                np.save(f'{cs.SAVE_OUT}/y_train_predicted', np.array(predictions_train))
