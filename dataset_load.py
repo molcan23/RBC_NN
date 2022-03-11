@@ -37,10 +37,14 @@ def dataset_load(dataset_path='', number_of_augmentations=10):
     target_data = np.array(target_data1)
 
     X_train, X_test, y_train, y_test = sklearn.model_selection.train_test_split(training_data, target_data,
-                                                                                test_size=0.1, random_state=1)
+                                                                                test_size=.1, random_state=1)
 
-    X_train, X_val, y_train, y_val = sklearn.model_selection.train_test_split(X_train, X_test,
-                                                                              test_size=0.2, random_state=1)
+    X_train, X_val2, y_train, y_val2 = sklearn.model_selection.train_test_split(X_train, y_train,
+                                                                                 test_size=.1, random_state=1)
+
+    X_train, X_val1, y_train, y_val1 = sklearn.model_selection.train_test_split(X_train, y_train,
+                                                                                test_size=.1, random_state=1)
+
     trd = []
     tad = []
     for sample, target in zip(X_train, y_train):
@@ -50,16 +54,18 @@ def dataset_load(dataset_path='', number_of_augmentations=10):
             trd.append(augmentation(sample))
             tad.append(target)
 
-    X_train, X_val = np.array(trd), np.array(tad)
+    X_train, y_train = np.array(trd), np.array(tad)
 
     X_train_CNN = np.reshape(X_train, [X_train.shape[0], X_train.shape[1], X_train.shape[2], 1])
-    X_val_CNN = np.reshape(X_val, [X_val.shape[0], X_val.shape[1], X_val.shape[2], 1])
+    X_val1_CNN = np.reshape(X_val1, [X_val1.shape[0], X_val1.shape[1], X_val1.shape[2], 1])
+    X_val2_CNN = np.reshape(X_val2, [X_val2.shape[0], X_val2.shape[1], X_val2.shape[2], 1])
     X_test_CNN = np.reshape(X_test, [X_test.shape[0], X_test.shape[1], X_test.shape[2], 1])
 
-    print('X_train shape == {}.'.format(training_data.shape))
+    # print('X_train shape == {}.'.format(training_data.shape))
 
     print('X_train shape == {}.'.format(X_train.shape))
-    print('X_val shape == {}.'.format(X_val.shape))
+    print('X_val1 shape == {}.'.format(X_val1.shape))
+    print('X_val2 shape == {}.'.format(X_val2.shape))
     print('X_test shape == {}.'.format(X_test.shape))
     print('y_train shape == {}.'.format(target_data.shape))
 
@@ -68,9 +74,12 @@ def dataset_load(dataset_path='', number_of_augmentations=10):
 
     np.save(f'data/{cs.TS_LENGTH}/X_train', np.array(X_train))
     np.save(f'data/{cs.TS_LENGTH}/y_train', np.array(y_train))
-    np.save(f'data/{cs.TS_LENGTH}/X_val', np.array(X_val))
-    np.save(f'data/{cs.TS_LENGTH}/y_val', np.array(y_val))
+    np.save(f'data/{cs.TS_LENGTH}/X_val1', np.array(X_val1))
+    np.save(f'data/{cs.TS_LENGTH}/y_val1', np.array(y_val1))
+    np.save(f'data/{cs.TS_LENGTH}/X_val2', np.array(X_val2))
+    np.save(f'data/{cs.TS_LENGTH}/y_val2', np.array(y_val2))
     np.save(f'data/{cs.TS_LENGTH}/X_test', np.array(X_test))
     np.save(f'data/{cs.TS_LENGTH}/y_test', np.array(y_test))
 
-    return X_train, X_val, X_test, y_train, y_val, y_test, X_train_CNN, X_val_CNN, X_test_CNN
+    return X_train, X_val1, X_val2, X_test, y_train, y_val1, y_val2, y_test,\
+           X_train_CNN, X_val_CNN1, X_val_CNN2, X_test_CNN

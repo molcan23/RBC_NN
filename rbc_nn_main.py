@@ -10,10 +10,10 @@ import tensorflow as tf
 from tensorflow.keras.callbacks import EarlyStopping, ReduceLROnPlateau, ModelCheckpoint
 import numpy as np
 import warnings
+
 warnings.filterwarnings("ignore")
 
 STANDARDIZE = True
-
 
 if __name__ == '__main__':
 
@@ -44,21 +44,20 @@ if __name__ == '__main__':
 
             print(cs.TS_LENGTH)
             dataset_creation()
-                
-            cs.SAVE_OUT= f'output/dataset/W_{cs.TS_LENGTH}_A_{cs.NUMBER_OF_AUGMENTATION}_X_{cs.SELECTED_AXIS}'
+
+            cs.SAVE_OUT = f'output/dataset/W_{cs.TS_LENGTH}_A_{cs.NUMBER_OF_AUGMENTATION}_X_{cs.SELECTED_AXIS}'
             if not os.path.exists(cs.SAVE_OUT):
                 os.makedirs(cs.SAVE_OUT)
 
-            X_train, X_val, X_test, y_train, y_val, y_test, X_train_CNN, X_val_CNN, X_test_CNN = \
-                dataset_load(number_of_augmentations=cs.NUMBER_OF_AUGMENTATION)
+            X_train, X_val1, X_val2, X_test, y_train, y_val1, y_val2, y_test, X_train_CNN, X_val1_CNN,\
+            X_val2_CNN, X_test_CNN = dataset_load(number_of_augmentations=cs.NUMBER_OF_AUGMENTATION)
 
             for model, label, data in zip([LSTM_model, CNN_LSTM_Conv1D_model, CNN_LSTM_Conv2D_model],
-                                    ['LSTM', 'CNN-LSTM_Conv1D', 'CNN-LSTM_Conv2D'],
-                                    [[X_train, X_val, y_train, y_val],
-                                     [X_train, X_val, y_train, y_val],
-                                     [X_train_CNN, X_val_CNN, y_train, y_val]]):
-
-                _X_train, _X_val, _y_train, _y_val = data
+                                          ['LSTM', 'CNN-LSTM_Conv1D', 'CNN-LSTM_Conv2D'],
+                                          [[X_train, X_val1, X_val2, y_train, y_val1, y_val2],
+                                           [X_train, X_val1, X_val2, y_train, y_val1, y_val2],
+                                           [X_train_CNN, X_val1_CNN, X_val2_CNN, y_train, y_val1, y_val2]]):
+                _X_train, _X_val1, _X_val2, _y_train, _y_val1, _y_val2 = data
                 loss_f = tf.keras.losses.MeanAbsolutePercentageError()
 
                 model_1 = model(learning_rate=1e-4, input_shape=_X_train[0].shape, loss_f=loss_f)
@@ -69,13 +68,13 @@ if __name__ == '__main__':
                                       verbose=1, save_best_only=True, save_weights_only=True)
 
                 history_1 = model_1.fit(_X_train, _y_train, shuffle=True, epochs=cs.EPOCHS, callbacks=[es, rlr, mcp],
-                                        validation_split=0.2, verbose=1, batch_size=256)
+                                        validation_data=(_X_val1, _y_val1), verbose=1, batch_size=256)
 
-                plot_learning_acc_loss(history_1,  f"{label}_LF_{cs.LOSS_FN}_W_{cs.TS_LENGTH}"
-                                                   f"_A_{cs.NUMBER_OF_AUGMENTATION}_SC_{cs.SELECTED_AXIS}")
+                plot_learning_acc_loss(history_1, f"{label}_LF_{cs.LOSS_FN}_W_{cs.TS_LENGTH}"
+                                                  f"_A_{cs.NUMBER_OF_AUGMENTATION}_SC_{cs.SELECTED_AXIS}")
 
                 print('\n\n')
-                score = model_1.evaluate(_X_val, _y_val, verbose=1)
+                score = model_1.evaluate(_X_val2, _y_val2, verbose=1)
                 print(f'{score}')
 
                 out_file = open(f'{cs.SAVE_OUT}/statistics.txt', "a")
@@ -87,13 +86,13 @@ if __name__ == '__main__':
                 out_file.close()
 
                 # predictions
-                predictions_test = model_1.predict(_X_val)
-                   
-                np.save(f'{cs.SAVE_OUT}/y_val', np.array(_y_val))
+                predictions_test = model_1.predict(_X_val2)
+
+                np.save(f'{cs.SAVE_OUT}/y_val', np.array(_y_val2))
                 np.save(f'{cs.SAVE_OUT}/y_val_predicted', np.array(predictions_test))
 
                 # training "predictions"
                 predictions_train = model_1.predict(_X_train)
-                    
+
                 np.save(f'{cs.SAVE_OUT}/y_train', np.array(_y_train))
                 np.save(f'{cs.SAVE_OUT}/y_train_predicted', np.array(predictions_train))
