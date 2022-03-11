@@ -17,7 +17,7 @@ STANDARDIZE = True
 
 if __name__ == '__main__':
 
-    for ts_window in [20, 30, 40, 50]:
+    for ts_window in [5, 10, 20, 30, 40, 50]:
         cs.TS_LENGTH = ts_window
         cs.NUMBER_OF_AUGMENTATION = round((10000 / ((cs.SAME_SIZE_OF_DF_FROM_SIMULATION - cs.START) / ts_window)) - 1)
 
