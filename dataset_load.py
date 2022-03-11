@@ -82,4 +82,4 @@ def dataset_load(dataset_path='', number_of_augmentations=10):
     np.save(f'data/{cs.TS_LENGTH}/y_test', np.array(y_test))
 
     return X_train, X_val1, X_val2, X_test, y_train, y_val1, y_val2, y_test,\
-           X_train_CNN, X_val_CNN1, X_val_CNN2, X_test_CNN
+           X_train_CNN, X_val1_CNN, X_val2_CNN, X_test_CNN
