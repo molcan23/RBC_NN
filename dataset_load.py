@@ -4,7 +4,7 @@ import sklearn.model_selection
 import os
 
 
-def augmentation(x, gaussian_noise_level=.001, offset_noise_level=1):
+def augmentation(x, gaussian_noise_level=.1, offset_noise_level=.25):
     noise = gaussian_noise_level * np.random.normal(size=x.shape)
     offset_noise = 2. * np.random.uniform(size=x.shape) - 1.0
     x_result = x + noise + offset_noise_level * offset_noise
@@ -38,17 +38,19 @@ def dataset_load(dataset_path='', number_of_augmentations=10):
 
     X_train, X_test, y_train, y_test = sklearn.model_selection.train_test_split(training_data, target_data,
                                                                                 test_size=0.1, random_state=1)
+
+    X_train, X_val, y_train, y_val = sklearn.model_selection.train_test_split(X_train, X_test,
+                                                                              test_size=0.2, random_state=1)
     trd = []
     tad = []
-    for sample, target in zip (X_train, y_train):
+    for sample, target in zip(X_train, y_train):
         trd.append(sample)
         tad.append(target)
         for _ in range(number_of_augmentations):
             trd.append(augmentation(sample))
             tad.append(target)
 
-    X_train, X_val, y_train, y_val = sklearn.model_selection.train_test_split(np.array(trd), np.array(tad),
-                                                                              test_size=0.2, random_state=1)
+    X_train, X_val = np.array(trd), np.array(tad)
 
     X_train_CNN = np.reshape(X_train, [X_train.shape[0], X_train.shape[1], X_train.shape[2], 1])
     X_val_CNN = np.reshape(X_val, [X_val.shape[0], X_val.shape[1], X_val.shape[2], 1])
