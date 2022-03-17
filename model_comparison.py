@@ -6,7 +6,6 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 import global_variables as cs
 
-
 if __name__ == '__main__':
 
     path = 'output/dataset'
@@ -31,15 +30,23 @@ if __name__ == '__main__':
     df_all['window'] = df_all['window'].astype('int')
     df_all['mape'] = df_all['mape'].astype('float')
     df_all['r2'] = df_all['r2'].astype('float')
+    df_all['model'] = df_all['model'].apply(lambda x: x[:-1])
+    df_all['model_ax'] = df_all['model'] + '_' + df_all['ax']
 
-    print(df_all)
+    print(df_all[df_all['window'] == 5])
 
-    for ax in ['xy', 'xz', 'xyz']:
-        dff = df_all[(df_all['ax'] == ax)]
-        sns.color_palette("light:#5A9", as_cmap=True)
-        sns.lineplot(data=dff, x='window', y='mape', hue='model', style='model',
-                     markers=True, dashes=False, linestyle="dashed", palette="flare")  #, legend=False)
-        # sns.scatterplot(data=dff, x='window', y='mape', hue='model')
-        plt.savefig(f'plots/{name}_{ax}.png')
-        plt.close()
-        # break
+    plt.figure(figsize=(15, 10))
+    sns.color_palette("light:#5A9", as_cmap=True)
+    sns.lineplot(data=df_all, x='window', y='mape', hue='model_ax', style='model_ax',
+                 markers=True, dashes=False, linestyle="dashed")  # , legend=False)
+    # sns.scatterplot(data=dff, x='window', y='mape', hue='model')
+    plt.savefig(f'plots/model_ax_comparison.png')
+    # plt.show()
+    plt.close()
+
+    sns.lineplot(data=df_all, x='window', y='r2', hue='model_ax', style='model_ax',
+                 markers=True, dashes=False, linestyle="dashed", palette="flare")  # , legend=False)
+    # sns.scatterplot(data=dff, x='window', y='mape', hue='model')
+    plt.savefig(f'plots/model_ax_r2_comparison.png')
+    # plt.show()
+    plt.close()
