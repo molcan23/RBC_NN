@@ -18,11 +18,11 @@ if __name__ == '__main__':
 
     for i in os.listdir(path):
         try:
-            # print(i)
+            print(i)
             a = pd.read_csv(f'{path}/{i}/statistics.txt', sep='\t', header=None)
             a.columns = ['model', 'window', 'mape', 'r2']
             # print(a)
-            a['ax'] = i.split('_')[-1]
+            a['ax'] = i.split('X')[-1][1:]
             df_all = pd.concat([df_all, a], ignore_index=True)
         except Exception as e:
             print(e, i)
@@ -33,20 +33,31 @@ if __name__ == '__main__':
     df_all['model'] = df_all['model'].apply(lambda x: x[:-1])
     df_all['model_ax'] = df_all['model'] + '_' + df_all['ax']
 
-    print(df_all[df_all['window'] == 5])
+    # print(df_all)
 
     plt.figure(figsize=(15, 10))
     sns.color_palette("light:#5A9", as_cmap=True)
-    sns.lineplot(data=df_all, x='window', y='mape', hue='model_ax', style='model_ax',
-                 markers=True, dashes=False, linestyle="dashed")  # , legend=False)
-    # sns.scatterplot(data=dff, x='window', y='mape', hue='model')
+    g = sns.lineplot(data=df_all, x='window', y='mape', hue='model_ax', style='model_ax',
+                     markers=True, dashes=False, linestyle="dashed")  # , legend=False)
+
+    handles, labels = plt.gca().get_legend_handles_labels()
+
+    # specify order
+    order = [1, 2, 3, 7, 8, 9, 4, 5, 6, 0, 10, 11]
+    plt.legend([handles[i] for i in order], [labels[i] for i in order])
+
     plt.savefig(f'plots/model_ax_comparison.png')
     # plt.show()
     plt.close()
 
     sns.lineplot(data=df_all, x='window', y='r2', hue='model_ax', style='model_ax',
                  markers=True, dashes=False, linestyle="dashed", palette="flare")  # , legend=False)
-    # sns.scatterplot(data=dff, x='window', y='mape', hue='model')
+
+    handles, labels = plt.gca().get_legend_handles_labels()
+
+    # specify order
+    order = [1, 2, 3, 7, 8, 9, 4, 5, 6, 0, 10, 11]
+    plt.legend([handles[i] for i in order], [labels[i] for i in order])
+
     plt.savefig(f'plots/model_ax_r2_comparison.png')
-    # plt.show()
     plt.close()

@@ -288,6 +288,59 @@ xyz_reduced_normalize = [
 ]
 
 
+xy_xz = [
+        "rbc_cuboid_x_min_x",
+        "rbc_cuboid_x_min_y",
+        "rbc_cuboid_x_min_z",
+        "rbc_cuboid_x_max_x",
+        "rbc_cuboid_x_max_y",
+        "rbc_cuboid_x_max_z",
+
+        "rbc_cuboid_y_min_x",
+        "rbc_cuboid_y_min_y",
+        "rbc_cuboid_y_max_x",
+        "rbc_cuboid_y_max_y",
+
+        "rbc_cuboid_z_min_x",
+        "rbc_cuboid_z_min_z",
+        "rbc_cuboid_z_max_x",
+        "rbc_cuboid_z_max_z",
+
+        'x_x_size',
+        'y_y_size',
+        'z_z_size',
+]
+
+
+xy_xz_standardize = [
+        "rbc_cuboid_x_min_y",
+        "rbc_cuboid_x_min_z",
+        "rbc_cuboid_x_max_y",
+        "rbc_cuboid_x_max_z",
+
+        "rbc_cuboid_y_min_y",
+        "rbc_cuboid_y_max_y",
+
+        "rbc_cuboid_z_min_z",
+        "rbc_cuboid_z_max_z",
+
+        'x_x_size',
+        'y_y_size',
+        'z_z_size',
+]
+
+
+xy_xz_normalize = [
+
+        "rbc_cuboid_x_min_x",
+        "rbc_cuboid_x_max_x",
+        "rbc_cuboid_y_min_x",
+        "rbc_cuboid_y_max_x",
+        "rbc_cuboid_z_min_x",
+        "rbc_cuboid_z_max_x",
+]
+
+
 SELECTED_AXIS = 'xy'
 SELECTED_COLUMNS = xy_reduced
 SELECTED_COLUMNS_TO_STANDARDIZE = xy_reduced_standardize
@@ -302,6 +355,11 @@ SELECTED_COLUMNS_TO_NORMALIZE = xy_reduced_normalize
 # SELECTED_COLUMNS = xyz_reduced
 # SELECTED_COLUMNS_TO_STANDARDIZE = xyz_reduced_standardize
 # SELECTED_COLUMNS_TO_NORMALIZE = xyz_reduced_normalize
+
+# SELECTED_AXIS = 'xy_xz'
+# SELECTED_COLUMNS = xy_xz
+# SELECTED_COLUMNS_TO_STANDARDIZE = xy_xz_standardize
+# SELECTED_COLUMNS_TO_NORMALIZE = xy_xz_normalize
 
 # parameters
 

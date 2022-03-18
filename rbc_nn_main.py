@@ -19,9 +19,9 @@ if __name__ == '__main__':
 
     for ts_window in [3, 5, 10, 20, 30, 40, 50]:
         cs.TS_LENGTH = ts_window
-        cs.NUMBER_OF_AUGMENTATION = round((10000 / ((cs.SAME_SIZE_OF_DF_FROM_SIMULATION - cs.START) / ts_window)) - 1)
+        cs.NUMBER_OF_AUGMENTATION = round((5000 / ((cs.SAME_SIZE_OF_DF_FROM_SIMULATION - cs.START) / ts_window)) - 1)
 
-        for selected_axis in ['xz']:  # , 'xz', 'xyz']:
+        for selected_axis in ['xy_xz']:  # , 'xz', 'xyz']:
             if selected_axis == 'xy':
                 cs.SELECTED_AXIS = 'xy'
                 cs.SELECTED_COLUMNS = cs.xy_reduced
@@ -37,6 +37,11 @@ if __name__ == '__main__':
                 cs.SELECTED_COLUMNS = cs.xyz_reduced
                 cs.SELECTED_COLUMNS_TO_STANDARDIZE = cs.xyz_reduced_standardize
                 cs.SELECTED_COLUMNS_TO_NORMALIZE = cs.xyz_reduced_normalize
+            if selected_axis == 'xy_xz':
+                cs.SELECTED_AXIS = 'xy_xz'
+                cs.SELECTED_COLUMNS = cs.xy_xz
+                cs.SELECTED_COLUMNS_TO_STANDARDIZE = cs.xy_xz_standardize
+                cs.SELECTED_COLUMNS_TO_NORMALIZE = cs.xy_xz_normalize
 
             cs.SAVE_PATH = f'data/dataset/W_{cs.TS_LENGTH}_A_{cs.NUMBER_OF_AUGMENTATION}_X_{cs.SELECTED_AXIS}'
             if not os.path.exists(cs.SAVE_PATH):

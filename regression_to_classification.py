@@ -90,7 +90,7 @@ def plot_confusion_matrix(cm,
     plt.ylabel('True label')
     plt.xlabel('Predicted label\naccuracy={:0.4f}; misclass={:0.4f}'.format(accuracy, misclass))
     plt.savefig(f'{cs.COMPARISON_PLOTS}/{name}_confusion_matrix.png')  # show()
-
+    plt.close()
 
 def percentage_difference(y_hat, y):
     return np.abs(((y_hat - y) / y) * 100)
@@ -130,11 +130,11 @@ if __name__ == '__main__':
     print(only_cell_files)
     for f in only_cell_files[1:]:
         try:
-            y_train = np.load(f'{path}/{f}/y_train.txt.npy')
-            y_hat_train = np.load(f'{path}/{f}/y_train_predicted.txt.npy')
+            y_train = np.load(f'{path}/{f}/y_train.npy')
+            y_hat_train = np.load(f'{path}/{f}/y_train_predicted.npy')
 
-            y_test = np.load(f'{path}/{f}/y_test.txt.npy')
-            y_hat_test = np.load(f'{path}/{f}/y_test_predicted.txt.npy')
+            y_test = np.load(f'{path}/{f}/y_val.npy')
+            y_hat_test = np.load(f'{path}/{f}/y_val_predicted.npy')
 
             data_for_plot(y_hat_test, y_test, f)
 
