@@ -43,7 +43,7 @@ if __name__ == '__main__':
     handles, labels = plt.gca().get_legend_handles_labels()
 
     # specify order
-    order = [1, 2, 3, 7, 8, 9, 4, 5, 6, 0, 10, 11]
+    order = [2, 3, 4, 8, 9, 10, 5, 6, 7, 0, 1, 11]
     plt.legend([handles[i] for i in order], [labels[i] for i in order])
 
     plt.savefig(f'plots/model_ax_comparison.png')
@@ -56,7 +56,7 @@ if __name__ == '__main__':
     handles, labels = plt.gca().get_legend_handles_labels()
 
     # specify order
-    order = [1, 2, 3, 7, 8, 9, 4, 5, 6, 0, 10, 11]
+    order = [2, 3, 4, 8, 9, 10, 5, 6, 7, 0, 1, 11]
     plt.legend([handles[i] for i in order], [labels[i] for i in order])
 
     plt.savefig(f'plots/model_ax_r2_comparison.png')
