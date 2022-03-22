@@ -45,7 +45,7 @@ if __name__ == '__main__':
     # specify order
     order = [2, 3, 4, 8, 9, 10, 5, 6, 7, 0, 1, 11]
     plt.legend([handles[i] for i in order], [labels[i] for i in order])
-
+    plt.title("Model-input data comparison")
     plt.savefig(f'plots/model_ax_comparison.png')
     # plt.show()
     plt.close()

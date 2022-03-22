@@ -1,7 +1,5 @@
-import numpy as np
 import os
 from boxplots_correct import *
-import matplotlib.pyplot as plt
 
 path = 'output/dataset'
 
