@@ -17,11 +17,11 @@ STANDARDIZE = True
 
 if __name__ == '__main__':
 
-    for ts_window in [3, 5, 10, 20, 30, 40, 50]:
+    for ts_window in [10]:
         cs.TS_LENGTH = ts_window
         cs.NUMBER_OF_AUGMENTATION = round((10000 / ((cs.SAME_SIZE_OF_DF_FROM_SIMULATION - cs.START) / ts_window)) - 1)
 
-        for selected_axis in ['xy_xz']:  # , 'xz', 'xyz']:
+        for selected_axis in ['xy', 'xz', 'xyz', 'xy_xz']:  # , 'xz', 'xyz']:
             if selected_axis == 'xy':
                 cs.SELECTED_AXIS = 'xy'
                 cs.SELECTED_COLUMNS = cs.xy_reduced
@@ -48,7 +48,7 @@ if __name__ == '__main__':
                 os.makedirs(cs.SAVE_PATH)
 
             print(cs.TS_LENGTH)
-            # dataset_creation()
+            dataset_creation()
 
             cs.SAVE_OUT = f'output/dataset/W_{cs.TS_LENGTH}_A_{cs.NUMBER_OF_AUGMENTATION}_X_{cs.SELECTED_AXIS}'
             if not os.path.exists(cs.SAVE_OUT):
@@ -57,15 +57,13 @@ if __name__ == '__main__':
             X_train, X_val1, X_val2, X_test, y_train, y_val1, y_val2, y_test, X_train_CNN, X_val1_CNN,\
             X_val2_CNN, X_test_CNN = dataset_load(number_of_augmentations=cs.NUMBER_OF_AUGMENTATION)
 
-            for model, label, data in zip([LSTM_model, CNN_LSTM_Conv1D_model, CNN_LSTM_Conv2D_model],
-                                          ['LSTM', 'CNN-LSTM_Conv1D', 'CNN-LSTM_Conv2D'],
-                                          [[X_train, X_val1, X_val2, y_train, y_val1, y_val2],
-                                           [X_train, X_val1, X_val2, y_train, y_val1, y_val2],
-                                           [X_train_CNN, X_val1_CNN, X_val2_CNN, y_train, y_val1, y_val2]]):
+            for model, label, data in zip([CNN_LSTM_Conv2D_model],
+                                          ['CNN-LSTM_Conv2D'],
+                                          [[X_train_CNN, X_val1_CNN, X_val2_CNN, y_train, y_val1, y_val2]]):
                 _X_train, _X_val1, _X_val2, _y_train, _y_val1, _y_val2 = data
                 loss_f = tf.keras.losses.MeanAbsolutePercentageError()
 
-                model_1 = model(learning_rate=1e-4, input_shape=_X_train[0].shape, loss_f=loss_f)
+                model_1 = model(number_of_classes=9, learning_rate=1e-4, input_shape=_X_train[0].shape)
 
                 es = EarlyStopping(monitor='val_loss', min_delta=1e-10, patience=10, verbose=1)
                 rlr = ReduceLROnPlateau(monitor='val_loss', factor=0.5, patience=10, verbose=1)

@@ -14,7 +14,7 @@ def augmentation(x, gaussian_noise_level=.1, offset_noise_level=.25):
 def dataset_load(dataset_path='', number_of_augmentations=10):
     dataset_path = f'data/dataset/W_{cs.TS_LENGTH}_A_{cs.NUMBER_OF_AUGMENTATION}_X_{cs.SELECTED_AXIS}'
     training_data1 = np.empty([1, cs.TS_LENGTH, len(cs.SELECTED_COLUMNS)], dtype=float)
-    target_data1 = []
+    target_data1 = [np.empty((9,), dtype=float)]
 
     print(f'{cs.TS_LENGTH} {cs.NUMBER_OF_AUGMENTATION}')
 
@@ -28,9 +28,12 @@ def dataset_load(dataset_path='', number_of_augmentations=10):
         trd = np.load(data_out)
         tad = np.load(label_out)
         training_data1 = np.append(training_data1, trd, axis=0)
+        # print(target_data1)
+        # print(tad)
         target_data1 = np.append(target_data1, tad, axis=0)
 
     training_data1 = np.delete(training_data1, 0, axis=0)
+    target_data1 = np.delete(target_data1, 0, axis=0)
 
     training_data = np.array(training_data1)
 

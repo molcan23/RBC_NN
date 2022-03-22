@@ -93,13 +93,13 @@ def r2_keras(y_true, y_pred):
 
 def plot_learning_acc_loss(history, name=""):
     # summarize history for r^2
-    plt.plot(history.history['r2_keras'])
-    plt.plot(history.history['val_r2_keras'])
-    plt.title('r2_keras')
-    plt.ylabel('mean_absolute_percentage_error')
+    plt.plot(history.history['accuracy'])
+    # plt.plot(history.history['accuracy_keras'])
+    plt.title('accuracy')
+    plt.ylabel('accuracy')
     plt.xlabel('epoch')
     plt.legend(['train', 'validation'], loc='upper left')
-    plt.savefig(f'{cs.SAVE_OUT}/{name}_model_r2_keras.png', bbox_inches='tight')
+    plt.savefig(f'{cs.SAVE_OUT}/{name}_model_accuracy_keras.png', bbox_inches='tight')
     # plt.show()
     plt.close()
 

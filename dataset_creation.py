@@ -5,7 +5,18 @@ import numpy as np
 import pandas as pd
 import tensorflow as tf
 import warnings
+
 warnings.filterwarnings("ignore")
+
+k_s = {'0.005': [1, 0, 0, 0, 0, 0, 0, 0, 0],
+       '0.009': [0, 1, 0, 0, 0, 0, 0, 0, 0],
+       '0.015': [0, 0, 1, 0, 0, 0, 0, 0, 0],
+       '0.03': [0, 0, 0, 1, 0, 0, 0, 0, 0],
+       '0.05': [0, 0, 0, 0, 1, 0, 0, 0, 0],
+       '0.1': [0, 0, 0, 0, 0, 1, 0, 0, 0],
+       '0.15': [0, 0, 0, 0, 0, 0, 1, 0, 0],
+       '0.225': [0, 0, 0, 0, 0, 0, 0, 1, 0],
+       '0.3': [0, 0, 0, 0, 0, 0, 0, 0, 1]}
 
 
 def standardize_columns(df, cols):
@@ -16,9 +27,9 @@ def standardize_columns(df, cols):
 
 
 def augmentation(x, gaussian_noise_level=.001, offset_noise_level=1):
-    noise        = gaussian_noise_level * np.random.normal(size=x.shape)
+    noise = gaussian_noise_level * np.random.normal(size=x.shape)
     offset_noise = 2. * np.random.uniform(size=x.shape) - 1.0
-    x_result     = x + noise + offset_noise_level * offset_noise
+    x_result = x + noise + offset_noise_level * offset_noise
     return x_result
 
 
@@ -39,7 +50,7 @@ def create_training_examples(df, target, ts_length=10, selected_columns=None, nu
         # sample = tf.convert_to_tensor(sample[cs.SELECTED_COLUMNS])
         sample = sample[cs.SELECTED_COLUMNS]
         training_data.append(sample)
-        target_data.append(target)
+        target_data.append(k_s[str(target)])
 
         # for _ in range(number_of_augmentation):
         #     training_data.append(augmentation(sample))
@@ -97,7 +108,8 @@ def dataset_creation():
     for i in range(0, number_of_cells):  # 52  # 48
         print(i, "/", 54)
         trd, tad = create_training_examples(
-            df_all[i * (cs.SAME_SIZE_OF_DF_FROM_SIMULATION - cs.START):(i + 1) * (cs.SAME_SIZE_OF_DF_FROM_SIMULATION - cs.START)],
+            df_all[i * (cs.SAME_SIZE_OF_DF_FROM_SIMULATION - cs.START):(i + 1) * (
+                        cs.SAME_SIZE_OF_DF_FROM_SIMULATION - cs.START)],
             rbc_coefficients[i],
             cs.TS_LENGTH,
             selected_columns=cs.SELECTED_COLUMNS,

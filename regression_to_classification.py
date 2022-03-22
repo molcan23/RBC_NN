@@ -16,6 +16,16 @@ k_s_ = [[0.005, 1], [0.009, 2], [0.015, 3], [0.03, 4], [0.05, 5],
         [0.1, 6], [0.15, 7], [0.225, 8], [0.3, 9]]
 borders = [float('-inf'), 0.007, 0.012, 0.0225, 0.04, 0.075, 0.125, 0.1875, 0.2625, float('inf')]
 
+k_from_onehot = {0: '0.005',
+                 1: '0.009',
+                 2: '0.015',
+                 3: '0.03',
+                 4: '0.05',
+                 5: '0.1',
+                 6: '0.15',
+                 7: '0.225',
+                 8: '0.3'}
+
 
 def plot_confusion_matrix(cm,
                           target_names,
@@ -89,8 +99,11 @@ def plot_confusion_matrix(cm,
     plt.tight_layout()
     plt.ylabel('True label')
     plt.xlabel('Predicted label\naccuracy={:0.4f}; misclass={:0.4f}'.format(accuracy, misclass))
-    plt.savefig(f'{cs.COMPARISON_PLOTS}/{name}_confusion_matrix.png')  # show()
+    if not os.path.exists(f'{cs.COMPARISON_PLOTS}/classification'):
+        os.makedirs(f'{cs.COMPARISON_PLOTS}/classification')
+    plt.savefig(f'{cs.COMPARISON_PLOTS}/classification/{name}_confusion_matrix.png')  # show()
     plt.close()
+
 
 def percentage_difference(y_hat, y):
     return np.abs(((y_hat - y) / y) * 100)
@@ -102,6 +115,11 @@ def real_to_class(real):
             return k_s[i]
 
 
+def onehot_to_class(onehot):
+    idx = np.argmax(onehot)
+    return k_from_onehot[idx]
+
+
 def data_for_plot(pred, real, folder):
     """
     TODO: finish this function with OneHoteEncoding
@@ -109,8 +127,8 @@ def data_for_plot(pred, real, folder):
     oh_pred = []
     oh_real = []
     for i, j in zip(pred, real):
-        oh_pred.append(real_to_class(i))
-        oh_real.append(real_to_class(j))
+        oh_pred.append(onehot_to_class(i))
+        oh_real.append(onehot_to_class(j))
 
     oh_real = np.array(oh_real)
     oh_pred = np.array(oh_pred)
@@ -140,4 +158,3 @@ if __name__ == '__main__':
 
         except Exception as e:
             print(e)
-
