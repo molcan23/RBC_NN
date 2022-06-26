@@ -5,7 +5,9 @@ import matplotlib.pyplot as plt
 
 
 def percentage_difference(y_hat, y):
-    return np.abs(((y_hat - y) / y) * 100)[0]
+    y_hat, y = np.array(y_hat), np.array(y)
+    #print(np.abs(((y_hat - y) / y) * 100))
+    return np.abs(((y_hat - y) / y) * 100)
 
 
 def absolute_error(y_hat, y):

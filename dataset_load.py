@@ -27,6 +27,9 @@ def dataset_load(dataset_path='', number_of_augmentations=10):
 
         trd = np.load(data_out)
         tad = np.load(label_out)
+        print(trd.shape)
+        print(training_data1.shape)
+
         training_data1 = np.append(training_data1, trd, axis=0)
         target_data1 = np.append(target_data1, tad, axis=0)
 

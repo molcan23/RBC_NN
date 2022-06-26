@@ -60,28 +60,28 @@ def dataset_creation():
     rbc_coefficients = []
     number_of_cells = 0
 
-    for simulation, coef in zip(['three_types', 'another_three_types', 'gap_three'],
-                                [[.3, .005, .03],
-                                 [.15, .015, .009],
-                                 [.225, .1, .05]]):
+    for simulation, coef in zip(['sim_9xKSin1_Aa_hct10_seed02_1/sim_9xKSin1_Aa_hct10_seed02_1'],
+                                [[.005, .009, .015, .03, .05, .1, .15, .225, .3]]):
 
         full_path = f"data/{simulation}"
-        only_cell_files = sorted([f for f in os.listdir(full_path) if re.match("rbc[0-9]+_.+.dat", f)])
+        print(full_path)
+        only_cell_files = sorted([f for f in os.listdir(full_path)])
         number_of_cells += len(only_cell_files)
-
+        print(only_cell_files)
         for i, file_ in enumerate(only_cell_files):
-            print(file_)
-            df = pd.read_table(f"{full_path}/{file_}", sep=" ", names=cs.head[1:]).drop(['NaN'], axis=1) \
-                     .drop([0], axis=0)[cs.START:cs.SAME_SIZE_OF_DF_FROM_SIMULATION]
-            df = df.astype('float32')
-            df_all = pd.concat([df_all, df], ignore_index=True)
-            if re.match(f"(rbc0_|rbc1_|rbc2_|rbc3_|rbc4_|rbc5_).*", file_):
-                rbc_coefficients.append(coef[0])
-            elif re.match(f"(rbc6_|rbc7_|rbc8_|rbc9_|rbc10_|rbc11_).*", file_):
-                rbc_coefficients.append(coef[1])
-            else:
-                rbc_coefficients.append(coef[2])
+            if re.match(f"rbc*", file_):
+                print(file_)
+                df = pd.read_table(f"{full_path}/{file_}", sep=" ", names=cs.head[1:]).drop(['NaN'], axis=1) \
+                    .drop([0], axis=0)[cs.START:cs.SAME_SIZE_OF_DF_FROM_SIMULATION]
+                df = df.astype('float32')
+                df_all = pd.concat([df_all, df], ignore_index=True)
+                # print(111)
+                a = file_.split("_")[0].split("c")[1]
+                m = int(a) // 6
+                rbc_coefficients.append(coef[m])
+                # print(m)
 
+    print(df_all.columns)
     # calculation of RBC height and width
     for ax1 in ['x', 'y', 'z']:
         for ax2 in ['x', 'y', 'z']:
@@ -94,7 +94,8 @@ def dataset_creation():
     if not os.path.exists(dataset_path):
         os.makedirs(dataset_path)
 
-    for i in range(0, number_of_cells):  # 52  # 48
+    print(number_of_cells)
+    for i in range(0, 54):  # 52  # 48
         print(i, "/", 54)
         trd, tad = create_training_examples(
             df_all[i * (cs.SAME_SIZE_OF_DF_FROM_SIMULATION - cs.START):(i + 1) * (cs.SAME_SIZE_OF_DF_FROM_SIMULATION - cs.START)],
