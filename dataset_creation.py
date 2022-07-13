@@ -60,12 +60,12 @@ def dataset_creation():
     rbc_coefficients = []
     number_of_cells = 0
 
-    for simulation, coef in zip(['three_types', 'another_three_types', 'gap_three'],
+    for simulation, coef in zip(['Sim3a', 'Sim3b', 'Sim3c'],
                                 [[.3, .005, .03],
                                  [.15, .015, .009],
                                  [.225, .1, .05]]):
 
-        full_path = f"data/{simulation}"
+        full_path = f"dataset/{simulation}"
         only_cell_files = sorted([f for f in os.listdir(full_path) if re.match("rbc[0-9]+_.+.dat", f)])
         number_of_cells += len(only_cell_files)
 
