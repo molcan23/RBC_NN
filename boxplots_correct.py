@@ -31,9 +31,11 @@ def data_for_plot(pred, real):
 
 
 def ks_boxplots(data, name, dir_labels, dir_prediction, outliers):
-    fig = plt.figure(figsize=(10, 7))
+
+    fig = plt.figure(figsize=(7, 5))
     ax = fig.add_axes([0, 0, 1, 1])
-    ax.boxplot(data, showfliers=outliers, showmeans=True)
+    #print(data)
+    ax.boxplot(np.array(data), showfliers=outliers, showmeans=True)
 
     plt.title('Absolute Percentage Error by True Value of ks')
     ax.set_xlabel('Value of ks')
@@ -47,12 +49,12 @@ def ks_boxplots(data, name, dir_labels, dir_prediction, outliers):
         plt.plot(x + 1, y, 'r.', alpha=0.2)
 
     plt.savefig(f'{name}/a.png', bbox_inches='tight')
-    # plt.show()
+    #plt.show()
     plt.close()
 
-    fig = plt.figure(figsize=(10, 7))
+    fig = plt.figure(figsize=(7, 5))
     ax = fig.add_axes([0, 0, 1, 1])
-    ax.boxplot(data, showfliers=outliers, showmeans=True)
+    ax.boxplot(np.array(data), showfliers=outliers, showmeans=True)
 
     plt.title('Absolute Percentage Error by True Value of ks')
     ax.set_xlabel('Value of ks')
@@ -66,7 +68,7 @@ def ks_boxplots(data, name, dir_labels, dir_prediction, outliers):
     plt.close()
 
     for idx, label in enumerate(dir_labels.keys()):
-        fig = plt.figure(figsize=(10, 7))
+        fig = plt.figure(figsize=(7, 5))
         ax = fig.add_axes([0, 0, 1, 1])
 
         x = dir_prediction[label]
