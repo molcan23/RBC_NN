@@ -17,11 +17,11 @@ STANDARDIZE = True
 
 if __name__ == '__main__':
 
-    for ts_window in [10]:
+    for ts_window in [3]:
         cs.TS_LENGTH = ts_window
         cs.NUMBER_OF_AUGMENTATION = round((10000 / ((cs.SAME_SIZE_OF_DF_FROM_SIMULATION - cs.START) / ts_window)) - 1)
 
-        for selected_axis in ['xy', 'xz', 'xyz', 'xy_xz']:  # , 'xz', 'xyz']:
+        for selected_axis in ['xz', 'xyz']:  # , 'xz', 'xyz']:
             if selected_axis == 'xy':
                 cs.SELECTED_AXIS = 'xy'
                 cs.SELECTED_COLUMNS = cs.xy_reduced
